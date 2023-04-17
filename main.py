@@ -1,26 +1,23 @@
 import requests
 import json
+from pprint import pprint
 
-def advertisements():
+## Variables
+# Api documentation https://api.marktplaats.nl/docs/v1/search-advertisements.html
+def search_query(query, offset, limit, catagory=820):
+    query = {
+        'query': query, 
+        'offset': offset,
+        'limit': limit,
+        'l1CategoryId': catagory
+        }
+    return query
+
+def advertisements(querystring):
     url = 'https://www.marktplaats.nl/lrp/api/search'
-
-    querystring = {
-        'attributesById[]': 10898,
-        'attributesById[]': 10882,
-        'l1CategoryId': 1953,
-        'limit': 30,
-        'offset': 2
-        }
-
-    headers = {
-        }
-
-    response = requests.get(url, headers=headers, params=querystring)
+    response = requests.get(url, headers={}, params=querystring)
     json_object = json.loads(response.content)
-    json_formatted_str = json.dumps(json_object, indent=1)
-    print(json_formatted_str)
+    return json.dumps(json_object, indent=4)
 
-
-
-    
-advertisements()
+querystring = search_query("iphone", 30, 2)
+pprint(advertisements(querystring))
